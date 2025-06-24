@@ -1,0 +1,7 @@
+[1/4] C:\WINDOWS\system32\cmd.exe /C "cd /D D:\PROYECTOS-PERSONALES\CuidadoAbuelito\build\esp-idf\esptool_py && C:\Espressif\python_env\idf5.4_py3.10_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.4.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app D:/PROYECTOS-PERSONALES/CuidadoAbuelito/build/partition_table/partition-table.bin D:/PROYECTOS-PERSONALES/CuidadoAbuelito/build/cuidado_abu.bin"
+cuidado_abu.bin binary size 0x12a200 bytes. Smallest app partition is 0x300000 bytes. 0x1d5e00 bytes (61%) free.
+[2/4] Performing build step for 'bootloader'
+[1/1] C:\WINDOWS\system32\cmd.exe /C "cd /D D:\PROYECTOS-PERSONALES\CuidadoAbuelito\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.4_py3.10_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.4.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 D:/PROYECTOS-PERSONALES/CuidadoAbuelito/build/bootloader/bootloader.bin"
+Bootloader binary size 0x6580 bytes. 0xa80 bytes (9%) free.
+[3/4] No install step for 'bootloader'
+[4/4] Completed 'bootloader'
