@@ -70,6 +70,7 @@ static void process_ble_command(const char* command, const size_t len)
         if (ssid && cJSON_IsString(ssid))
         {
             wifi_cmd.cmd = WIFI_CMD_CONNECT;
+            wifi_cmd.response_callback = ble_adv_send_data;
             strncpy(wifi_cmd.ssid, ssid->valuestring, sizeof(wifi_cmd.ssid) - 1);
 
             if (password && cJSON_IsString(password))
