@@ -355,7 +355,6 @@ static void analyze_fall_software(sensor_data_t* data)
         {
             fall_state = FALL_STATE_FREE_FALL;
             free_fall_start = data->timestamp;
-            ESP_LOGI(TAG, "Free fall detected");
         }
         break;
 
@@ -432,7 +431,6 @@ static void analyze_fall_software(sensor_data_t* data)
             {
                 fall_state = FALL_STATE_NORMAL;
                 last_confidence = 0.0f;
-                ESP_LOGI(TAG, "Fall state auto-reset");
                 break;
             }
 
@@ -445,7 +443,6 @@ static void analyze_fall_software(sensor_data_t* data)
             {
                 fall_state = FALL_STATE_NORMAL;
                 last_confidence = 0.0f;
-                ESP_LOGI(TAG, "Returned to normal state");
             }
             break;
         }
@@ -469,8 +466,6 @@ static void fall_detection_task(void* arg)
             static uint32_t last_debug = 0;
             if (data.timestamp - last_debug > 2000)
             {
-                ESP_LOGI(TAG, "State: %d, Accel: %.2f, Gyro: %.2f, Confidence: %.1f%%",
-                         fall_state, data.accel_magnitude, data.gyro_magnitude, last_confidence);
                 last_debug = data.timestamp;
             }
         }

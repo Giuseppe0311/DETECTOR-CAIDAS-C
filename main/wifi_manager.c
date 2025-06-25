@@ -532,27 +532,8 @@ static void wifi_scan_task(const wifi_command_t* cmd)
         if (cmd->response_callback) cmd->response_callback("{\"error\":\"json_failed\"}");
         return;
     }
-
-    // 6) Enviar en trozos (chunks) de 200 bytes
-    const size_t CHUNK_SIZE = 200;
-    const size_t total_len = strlen(json_str);
-    for (size_t offset = 0; offset < total_len; offset += CHUNK_SIZE)
-    {
-        size_t len_chunk = total_len - offset;
-        if (len_chunk > CHUNK_SIZE) len_chunk = CHUNK_SIZE;
-        char chunk[CHUNK_SIZE + 1];
-        memcpy(chunk, json_str + offset, len_chunk);
-        chunk[len_chunk] = '\0';
-        ESP_LOGI(TAG, "Chunk [%u..%u]: %s", (unsigned)offset, (unsigned)(offset + len_chunk), chunk);
-        if (cmd->response_callback)
-        {
-            bool ok = cmd->response_callback(chunk);
-            if (!ok)
-            {
-                ESP_LOGE(TAG, "Fallo al enviar chunk BLE");
-                break;
-            }
-        }
+    if (cmd->response_callback) {
+        cmd->response_callback(json_str);
     }
     ESP_LOGI(TAG, "Escaneo WiFi completado, %d redes encontradas", ap_count);
     // 7) Liberar JSON original

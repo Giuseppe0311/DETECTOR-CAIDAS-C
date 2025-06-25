@@ -383,7 +383,47 @@ bool ble_adv_send_data(const char* data)
         return false;
     }
 
-    const size_t len = strlen(data);
-    esp_ble_gatts_send_indicate(s_gatts_if, s_conn_id, char_tx_handle, len, (uint8_t*)data, false);
+    // Delimitadores y tamaño de chunk
+    const char *start_delim = "<<START>>";
+    const char *end_delim   = "<<END>>";
+    const size_t CHUNK_SIZE = 20;
+
+    size_t start_len   = strlen(start_delim);
+    size_t data_len    = strlen(data);
+    size_t end_len     = strlen(end_delim);
+    size_t wrapped_len = start_len + data_len + end_len;
+
+    // Construir el mensaje completo: <<START>> + data + <<END>>
+    char *wrapped = malloc(wrapped_len + 1);
+    if (wrapped == NULL)
+    {
+        return false;
+    }
+    memcpy(wrapped,                    start_delim, start_len);
+    memcpy(wrapped + start_len,        data,        data_len);
+    memcpy(wrapped + start_len + data_len, end_delim,   end_len);
+    wrapped[wrapped_len] = '\0';
+
+    for (size_t offset = 0; offset < wrapped_len; offset += CHUNK_SIZE)
+    {
+        size_t len_chunk = wrapped_len - offset;
+        if (len_chunk > CHUNK_SIZE) len_chunk = CHUNK_SIZE;
+
+        esp_err_t err = esp_ble_gatts_send_indicate(
+            s_gatts_if,
+            s_conn_id,
+            char_tx_handle,
+            len_chunk,
+            (uint8_t*)(wrapped + offset),
+            false
+        );
+        if (err != ESP_OK)
+        {
+            free(wrapped);
+            return false;
+        }
+    }
+
+    free(wrapped);
     return true;
 }

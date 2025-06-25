@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "cuidado_abu",
-    "project_version":    "7996b0a-dirty",
+    "project_version":    "70cf375-dirty",
     "project_path":       "D:/PROYECTOS-PERSONALES/CuidadoAbuelito",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v5.4.1",
     "build_dir":          "D:/PROYECTOS-PERSONALES/CuidadoAbuelito/build",

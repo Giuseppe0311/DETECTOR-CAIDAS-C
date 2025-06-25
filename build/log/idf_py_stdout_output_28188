@@ -1,0 +1,230 @@
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3860
+entry 0x4008063c
+[0;32mI (31) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Jun 25 2025 14:40:23[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v3.1[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 4MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00300000[0m
+[0;32mI (79) boot:  3 storage          Unknown data     01 82 00310000 000e0000[0m
+[0;32mI (86) boot:  4 config           WiFi data        01 02 003f0000 00010000[0m
+[0;32mI (92) boot: End of partition table[0m
+[0;32mI (95) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=37c58h (228440) map[0m
+[0;32mI (181) esp_image: segment 1: paddr=00047c80 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (181) esp_image: segment 2: paddr=00047ca4 vaddr=3ffbdb60 size=05cfch ( 23804) load[0m
+[0;32mI (194) esp_image: segment 3: paddr=0004d9a8 vaddr=40080000 size=02670h (  9840) load[0m
+[0;32mI (198) esp_image: segment 4: paddr=00050020 vaddr=400d0020 size=10118ch (1053068) map[0m
+[0;32mI (560) esp_image: segment 5: paddr=001511b4 vaddr=40082670 size=153d0h ( 86992) load[0m
+[0;32mI (606) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (606) boot: Disabling RNG early entropy source...[0m
+[0;32mI (616) cpu_start: Multicore app[0m
+[0;32mI (625) cpu_start: Pro cpu start user code[0m
+[0;32mI (625) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (625) app_init: Application information:[0m
+[0;32mI (625) app_init: Project name:     cuidado_abu[0m
+[0;32mI (629) app_init: App version:      70cf375-dirty[0m
+[0;32mI (633) app_init: Compile time:     Jun 25 2025 17:16:28[0m
+[0;32mI (638) app_init: ELF file SHA256:  0b4b87b77...[0m
+[0;32mI (643) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (647) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (650) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (654) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (659) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (665) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (670) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (675) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (680) heap_init: At 3FFCC100 len 00013F00 (79 KiB): DRAM[0m
+[0;32mI (685) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (690) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (696) heap_init: At 40097A40 len 000085C0 (33 KiB): IRAM[0m
+[0;32mI (703) spi_flash: detected chip: generic[0m
+[0;32mI (705) spi_flash: flash io: dio[0m
+[0;33mW (708) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (719) coexist: coex firmware version: e727207[0m
+[0;32mI (723) main_task: Started on CPU0[0m
+[0;32mI (733) main_task: Calling app_main()[0m
+[0;32mI (753) WIFI_MGR: UUID cargado desde NVS: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (773) wifi:wifi driver task: 3ffd04f4, prio:23, stack:6656, core=0[0m
+[0;32mI (783) wifi:wifi firmware version: 79fa3f41ba[0m
+[0;32mI (783) wifi:wifi certification version: v7.0[0m
+[0;32mI (783) wifi:config NVS flash: enabled[0m
+[0;32mI (783) wifi:config nano formatting: disabled[0m
+[0;32mI (793) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (793) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (803) wifi:Init management short buffer num: 32[0m
+[0;32mI (803) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (803) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (813) wifi:Init static rx buffer num: 10[0m
+[0;32mI (813) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (823) wifi_init: rx ba win: 6[0m
+[0;32mI (823) wifi_init: accept mbox: 6[0m
+[0;32mI (823) wifi_init: tcpip mbox: 32[0m
+[0;32mI (823) wifi_init: udp mbox: 6[0m
+[0;32mI (833) wifi_init: tcp mbox: 6[0m
+[0;32mI (833) wifi_init: tcp tx win: 5760[0m
+[0;32mI (833) wifi_init: tcp rx win: 5760[0m
+[0;32mI (843) wifi_init: tcp mss: 1440[0m
+[0;32mI (843) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (933) wifi:mode : sta (ec:64:c9:5d:de:a8)[0m
+[0;32mI (933) wifi:enable tsf[0m
+[0;32mI (943) WIFI_MGR: WiFi Manager inicializado con device_id: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (943) BLE_ADV: Inicializando BLE con nombre: CUIDADO ABUELITO[0m
+[0;32mI (943) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (953) BTDM_INIT: Bluetooth MAC: ec:64:c9:5d:de:aa[0m
+[0;32mI (1283) BLE_ADV: GATT Server registrado[0m
+[0;32mI (1283) BLE_ADV: Servicio creado, handle: 40[0m
+[0;32mI (1283) BLE_ADV: Servicio iniciado[0m
+[0;32mI (1283) BLE_ADV: Característica añadida, handle: 42, step: 1[0m
+[0;32mI (1283) BLE_ADV: Característica RX añadida, handle: 42[0m
+[0;32mI (1293) BLE_ADV: Característica añadida, handle: 44, step: 2[0m
+[0;32mI (1293) BLE_ADV: Característica TX añadida, handle: 44[0m
+[0;32mI (1303) FALL_DETECT: Starting fall detection system...[0m
+[0;32mI (1313) BLE_ADV: Datos de advertising configurados[0m
+[0;32mI (1313) BLE_ADV: Scan response configurado[0m
+[0;32mI (1333) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (1423) FALL_DETECT: MPU6050 initialized[0m
+[0;32mI (1423) FALL_DETECT: Keep arm relaxed for calibration...[0m
+[0;32mI (2433) FALL_DETECT: Calibrating... 25%[0m
+[0;32mI (2633) FALL_DETECT: Calibrating... 50%[0m
+[0;32mI (2833) FALL_DETECT: Calibrating... 75%[0m
+[0;32mI (3033) FALL_DETECT: Calibrating... 100%[0m
+[0;32mI (3223) FALL_DETECT: Calibration complete: 1.00g[0m
+[0;32mI (3823) FALL_DETECT: Initial orientation: roll=-35.3°, pitch=-40.0°[0m
+[0;32mI (3823) FALL_DETECT: Starting fall detection task...[0m
+[0;32mI (3823) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.18, Confidence: 0.0%[0m
+[0;32mI (3823) main_task: Returned from app_main()[0m
+[0;32mI (4023) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (4033) BLE_ADV: Advertising detenido[0m
+[0;32mI (5833) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.13, Confidence: 0.0%[0m
+[0;32mI (7843) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (9853) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (11863) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.16, Confidence: 0.0%[0m
+[0;32mI (12753) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (12753) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (12753) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (12753) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (13873) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.01, Confidence: 0.0%[0m
+[0;32mI (15883) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.15, Confidence: 0.0%[0m
+[0;32mI (17663) WIFI_MGR: Escaneo WiFi completado, 5 redes encontradas[0m
+[0;32mI (17893) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (19903) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.13, Confidence: 0.0%[0m
+[0;32mI (21913) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (23923) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (25933) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.07, Confidence: 0.0%[0m
+[0;32mI (27943) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.22, Confidence: 0.0%[0m
+[0;32mI (29953) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (31963) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (33973) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.06, Confidence: 0.0%[0m
+[0;32mI (35983) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (37993) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.06, Confidence: 0.0%[0m
+[0;32mI (40003) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (42013) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (44023) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (46033) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (48043) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.53, Confidence: 0.0%[0m
+[0;32mI (50053) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;33mW (52053) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (52053) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (52063) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.16, Confidence: 0.0%[0m
+[0;32mI (52073) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (54073) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.26, Confidence: 0.0%[0m
+[0;32mI (56083) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.10, Confidence: 0.0%[0m
+[0;32mI (58093) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (60103) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (61043) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (61043) BLE_ADV: Advertising detenido[0m
+[0;32mI (62113) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.13, Confidence: 0.0%[0m
+[0;32mI (63373) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (63373) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (63383) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (63383) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (64123) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (66133) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.13, Confidence: 0.0%[0m
+[0;32mI (68143) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.19, Confidence: 0.0%[0m
+[0;32mI (68283) WIFI_MGR: Escaneo WiFi completado, 12 redes encontradas[0m
+[0;33mW (68283) BT_GATT: attribute value too long, to be truncated to 20[0m
+[0;33mW (68283) BT_GATT: attribute value too long, to be truncated to 20[0m
+[0;32mI (70153) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (72163) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (74173) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (76183) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (78193) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (80203) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (82213) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.15, Confidence: 0.0%[0m
+[0;32mI (84223) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (86233) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.27, Confidence: 0.0%[0m
+[0;33mW (86413) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (86413) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (86433) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (88243) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.15, Confidence: 0.0%[0m
+[0;32mI (90253) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (92263) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.01, Confidence: 0.0%[0m
+[0;32mI (94273) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.16, Confidence: 0.0%[0m
+[0;32mI (96283) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.03, Confidence: 0.0%[0m
+[0;32mI (98293) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (100303) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.15, Confidence: 0.0%[0m
+[0;32mI (102313) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (104323) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (106333) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (108343) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (110353) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (112363) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.14, Confidence: 0.0%[0m
+[0;32mI (114373) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (116383) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.18, Confidence: 0.0%[0m
+[0;32mI (118393) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.01, Confidence: 0.0%[0m
+[0;32mI (120403) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.04, Confidence: 0.0%[0m
+[0;32mI (122413) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.19, Confidence: 0.0%[0m
+[0;32mI (124423) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.05, Confidence: 0.0%[0m
+[0;32mI (126433) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.19, Confidence: 0.0%[0m
+[0;32mI (128443) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (130453) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (132463) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.06, Confidence: 0.0%[0m
+[0;32mI (134473) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.20, Confidence: 0.0%[0m
+[0;32mI (136483) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.10, Confidence: 0.0%[0m
+[0;32mI (138493) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (140503) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (142513) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.17, Confidence: 0.0%[0m
+[0;32mI (144523) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (146533) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.31, Confidence: 0.0%[0m
+[0;32mI (148543) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 2.96, Confidence: 0.0%[0m
+[0;32mI (150553) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (152563) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.12, Confidence: 0.0%[0m
+[0;32mI (154573) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (156583) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.19, Confidence: 0.0%[0m
+[0;32mI (158593) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.09, Confidence: 0.0%[0m
+[0;32mI (160603) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.18, Confidence: 0.0%[0m
+[0;32mI (162613) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.18, Confidence: 0.0%[0m
+[0;32mI (164623) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.10, Confidence: 0.0%[0m
+[0;32mI (166633) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (168643) FALL_DETECT: State: 0, Accel: 1.01, Gyro: 3.20, Confidence: 0.0%[0m
+[0;32mI (170653) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.02, Confidence: 0.0%[0m
+[0;32mI (172663) FALL_DETECT: State: 0, Accel: 0.99, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (174673) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.04, Confidence: 0.0%[0m
+[0;32mI (175433) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (175433) BLE_ADV: Advertising detenido[0m
+[0;32mI (176683) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.08, Confidence: 0.0%[0m
+[0;32mI (178693) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.20, Confidence: 0.0%[0m
+[0;32mI (179203) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (179213) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (179213) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (179213) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (180703) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.11, Confidence: 0.0%[0m
+[0;32mI (182713) FALL_DETECT: State: 0, Accel: 1.00, Gyro: 3.10, Confidence: 0.0%[0m
+[0;32mI (184123) WIFI_MGR: Escaneo WiFi comple
