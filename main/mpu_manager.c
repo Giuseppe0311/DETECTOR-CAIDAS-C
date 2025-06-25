@@ -1,9 +1,15 @@
-// #include "mpu_manager.h"
+#include "mpu_manager.h"
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+
+#include "esp_crt_bundle.h"
+#include "esp_http_client.h"
 #include "driver/i2c.h"
 #include "esp_log.h"
+#include "esp_netif.h"
+#include "esp_netif_types.h"
+#include "nvs.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -30,25 +36,6 @@
 #define ORIENTATION_SAMPLES        30
 
 static const char* TAG = "FALL_DETECT";
-
-// Fall detection state
-typedef enum
-{
-    FALL_STATE_NORMAL,
-    FALL_STATE_FREE_FALL,
-    FALL_STATE_FALL_DETECTED
-} fall_state_t;
-
-// Sensor data structure
-typedef struct
-{
-    float accel_x, accel_y, accel_z;
-    float gyro_x, gyro_y, gyro_z;
-    float accel_magnitude;
-    float gyro_magnitude;
-    uint32_t timestamp;
-} sensor_data_t;
-
 // Fall detection variables
 static float gravity_baseline = 1.0f;
 static float y_baseline = 0.5f;
@@ -82,21 +69,8 @@ static float axis_free_fall_thresh_y = 0.15f;
 static float axis_impact_thresh = 1.5f;
 static float axis_impact_thresh_y = 2.2f;
 
-// Function declarations
-static esp_err_t i2c_master_init(void);
-static esp_err_t mpu6050_write_reg(uint8_t reg, uint8_t data);
-static esp_err_t mpu6050_read_regs(uint8_t reg, uint8_t* buf, size_t len);
-static void mpu6050_init(void);
-static bool mpu6050_read_raw(int16_t* accel, int16_t* gyro);
-static void convert_raw_to_physical(int16_t* raw_accel, int16_t* raw_gyro, sensor_data_t* data);
-static bool calibrate_gravity(void);
-static bool record_initial_orientation(void);
-static void update_history(float a_mag, float g_mag);
-static bool detect_free_fall_window(void);
-static bool detect_axis_impact(sensor_data_t* data);
-static void compute_orientation(sensor_data_t* data, float* roll, float* pitch);
-static void analyze_fall_software(sensor_data_t* data);
-static void fall_detection_task(void* arg);
+static SemaphoreHandle_t fall_sem;
+
 
 // Initialize I2C as master
 static esp_err_t i2c_master_init(void)
@@ -258,6 +232,13 @@ static bool calibrate_gravity(void)
     }
 }
 
+static void compute_orientation(sensor_data_t* data, float* roll, float* pitch)
+{
+    *roll = atan2f(data->accel_y, data->accel_z) * 180.0f / M_PI;
+    *pitch = atan2f(-data->accel_x, sqrtf(data->accel_y * data->accel_y +
+                        data->accel_z * data->accel_z)) * 180.0f / M_PI;
+}
+
 // Record initial orientation
 static bool record_initial_orientation(void)
 {
@@ -361,12 +342,6 @@ static bool detect_axis_impact(sensor_data_t* data)
 }
 
 // Compute orientation
-static void compute_orientation(sensor_data_t* data, float* roll, float* pitch)
-{
-    *roll = atan2f(data->accel_y, data->accel_z) * 180.0f / M_PI;
-    *pitch = atan2f(-data->accel_x, sqrtf(data->accel_y * data->accel_y +
-                        data->accel_z * data->accel_z)) * 180.0f / M_PI;
-}
 
 // Main fall analysis function
 static void analyze_fall_software(sensor_data_t* data)
@@ -413,6 +388,7 @@ static void analyze_fall_software(sensor_data_t* data)
                     last_confidence = 80.0f;
                     last_alert_time = current_time;
                     ESP_LOGW(TAG, "*** CAIDA DETECTADA *** Confidence: %.1f%%", last_confidence);
+                    xSemaphoreGive(fall_sem);
                 }
                 else
                 {
@@ -434,6 +410,7 @@ static void analyze_fall_software(sensor_data_t* data)
                         last_confidence = 65.0f;
                         last_alert_time = current_time;
                         ESP_LOGW(TAG, "*** CAIDA DETECTADA *** (Long fall) Confidence: %.1f%%", last_confidence);
+                        xSemaphoreGive(fall_sem);
                     }
                     else
                     {
@@ -502,6 +479,82 @@ static void fall_detection_task(void* arg)
     }
 }
 
+static void fall_sender_task(void* arg)
+{
+    char device_uuid[37] = {0};
+    nvs_handle_t nvs_handle;
+    esp_err_t err;
+
+    // 1) Lee el UUID desde NVS al iniciar la tarea
+    err = nvs_open("device", NVS_READONLY, &nvs_handle);
+    if (err == ESP_OK)
+    {
+        size_t len = sizeof(device_uuid);
+        if (nvs_get_str(nvs_handle, "uuid", device_uuid, &len) != ESP_OK)
+        {
+            ESP_LOGW(TAG, "No pude leer UUID de NVS");
+        }
+        nvs_close(nvs_handle);
+    }
+    else
+    {
+        ESP_LOGW(TAG, "No pude abrir NVS para UUID");
+    }
+
+    while (1)
+    {
+        // Espera señal de caída
+        if (xSemaphoreTake(fall_sem, portMAX_DELAY) == pdTRUE)
+        {
+            // Verifica IP
+            esp_netif_ip_info_t ip_info;
+            esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_STA_DEF"), &ip_info);
+            if (ip_info.ip.addr == 0)
+            {
+                ESP_LOGW(TAG, "Sin Wi-Fi, omito envío");
+                continue;
+            }
+
+            // Configura cliente HTTP dentro del bucle para no reutilizar estado
+            esp_http_client_config_t config = {
+                .url = "https://oldalert-server.vercel.app/api/fall-detected",
+                .method = HTTP_METHOD_POST,
+                .transport_type = HTTP_TRANSPORT_OVER_SSL,
+                .use_global_ca_store = true,
+                .disable_auto_redirect = false,
+                .crt_bundle_attach = esp_crt_bundle_attach,
+                .timeout_ms = 10000,
+            };
+            esp_http_client_handle_t client = esp_http_client_init(&config);
+            esp_http_client_set_header(client, "Content-Type", "application/json");
+
+            // Construye payload
+            char payload[64];
+            int payload_len = snprintf(payload, sizeof(payload),
+                                       "{\"device_id\":\"%s\"}",
+                                       device_uuid);
+
+            // Usa set_post_field en lugar de write
+            esp_http_client_set_post_field(client, payload, payload_len);
+
+            // Envía y captura error
+            esp_err_t err = esp_http_client_perform(client);
+            if (err == ESP_OK)
+            {
+                int status = esp_http_client_get_status_code(client);
+                ESP_LOGI(TAG, "Envío OK, HTTP status = %d", status);
+            }
+            else
+            {
+                ESP_LOGW(TAG, "Error esp_http_client_perform: %s", esp_err_to_name(err));
+            }
+
+            esp_http_client_cleanup(client);
+        }
+    }
+}
+
+
 // Initialize and start fall detection system
 void mpu_manager_start(void)
 {
@@ -525,8 +578,9 @@ void mpu_manager_start(void)
         ESP_LOGW(TAG, "Using default initial orientation");
     }
 
-    ESP_LOGI(TAG, "Starting fall detection task...");
+    fall_sem = xSemaphoreCreateBinary();
 
+    ESP_LOGI(TAG, "Starting fall detection task...");
     // Create fall detection task
     xTaskCreate(fall_detection_task,
                 "fall_detection",
@@ -534,4 +588,8 @@ void mpu_manager_start(void)
                 NULL,
                 5,
                 NULL);
+
+
+    // Tarea que envía al servidor
+    xTaskCreate(fall_sender_task, "fall_sender", 4096, NULL, 4, NULL);
 }
