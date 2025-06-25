@@ -11,12 +11,12 @@
 #include "esp_wifi.h"
 #include "esp_wifi_default.h"
 #include "esp_http_client.h"
-#include "esp_mac.h"
 #include "esp_random.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "nvs_flash.h"
 #include "nvs.h"
+#include "esp_crt_bundle.h"
 
 static const char* TAG = "WIFI_MGR";
 static QueueHandle_t wifi_cmd_queue = NULL;
@@ -133,17 +133,18 @@ static bool send_device_status(const char* ip_address)
         return false;
     }
 
-    ESP_LOGI(TAG, "Payload: %s", json_string);
+    ESP_LOGI(TAG, "Payload JSON: %s", json_string);
+    ESP_LOGI(TAG, "Payload length: %d", strlen(json_string));
 
     // Configurar cliente HTTP
     esp_http_client_config_t config = {
         .url = DEVICE_STATUS_URL,
-        .method = HTTP_METHOD_POST,
-        .disable_auto_redirect = false,
+        .method = HTTP_METHOD_POST,  // Especificar método explícitamente
         .transport_type = HTTP_TRANSPORT_OVER_SSL,
-        .use_global_ca_store = false,
-        .skip_cert_common_name_check = true,
-        .cert_pem = NULL,
+        .use_global_ca_store = true,
+        .disable_auto_redirect = false,
+        .crt_bundle_attach = esp_crt_bundle_attach,
+        .timeout_ms = 10000
     };
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
@@ -154,13 +155,30 @@ static bool send_device_status(const char* ip_address)
         return false;
     }
 
-    // Configurar headers
+    // Configurar headers más explícitamente
     esp_http_client_set_header(client, "Content-Type", "application/json");
+    esp_http_client_set_header(client, "Accept", "application/json");
+    esp_http_client_set_header(client, "User-Agent", "ESP32-Device");
+
+    // Configurar el cuerpo de la petición
     esp_http_client_set_post_field(client, json_string, strlen(json_string));
+
+    ESP_LOGI(TAG, "Enviando petición a: %s", DEVICE_STATUS_URL);
 
     // Realizar petición
     esp_err_t err = esp_http_client_perform(client);
     int status_code = esp_http_client_get_status_code(client);
+    int content_length = esp_http_client_get_content_length(client);
+
+    // Leer respuesta del servidor para debug
+    char response_buffer[512] = {0};
+    if (content_length > 0 && content_length < sizeof(response_buffer)) {
+        int data_read = esp_http_client_read_response(client, response_buffer, sizeof(response_buffer) - 1);
+        if (data_read > 0) {
+            response_buffer[data_read] = '\0';
+            ESP_LOGI(TAG, "Respuesta del servidor: %s", response_buffer);
+        }
+    }
 
     esp_http_client_cleanup(client);
     free(json_string);
@@ -172,17 +190,17 @@ static bool send_device_status(const char* ip_address)
     }
     else
     {
-        ESP_LOGW(TAG, "Error enviando device status: err=%s, status=%d",
-                 esp_err_to_name(err), status_code);
+        ESP_LOGW(TAG, "Error enviando device status: err=%s, status=%d, content_length=%d",
+                 esp_err_to_name(err), status_code, content_length);
         return false;
     }
 }
-
 static const char* reason_str(int reason)
 {
     switch (reason)
     {
     case WIFI_REASON_AUTH_FAIL:
+    case WIFI_REASON_AUTH_EXPIRE:
     case WIFI_REASON_4WAY_HANDSHAKE_TIMEOUT:
         return "wrong_password";
     case WIFI_REASON_NO_AP_FOUND: return "network_not_found";
@@ -220,12 +238,9 @@ static bool test_internet_connectivity(void)
         ESP_LOGI(TAG, "Test de conectividad exitoso");
         return true;
     }
-    else
-    {
-        ESP_LOGW(TAG, "Test de conectividad falló: err=%s, status=%d",
-                 esp_err_to_name(err), status_code);
-        return false;
-    }
+    ESP_LOGW(TAG, "Test de conectividad falló: err=%s, status=%d",
+             esp_err_to_name(err), status_code);
+    return false;
 }
 
 // Función alternativa usando ping DNS
@@ -250,7 +265,7 @@ static bool test_dns_connectivity(void)
     esp_http_client_cleanup(client);
 
     // Cualquier respuesta indica que hay conectividad
-    return (err == ESP_OK || err == ESP_ERR_HTTP_CONNECT);
+    return (err == ESP_OK);
 }
 
 // Handler: desconexión WiFi (fallo de conexión)
@@ -349,8 +364,7 @@ static void connectivity_test_task(void* pvParameters)
             else
             {
                 snprintf(response, sizeof(response),
-                         "{\"status\":\"error\",\"detail\":\"no_internet\",\"device_id\":\"%s\"}",
-                         device_uuid);
+                         "{\"status\":\"error\",\"detail\":\"no_internet\"}");
                 ESP_LOGW(TAG, "WiFi conectado sin acceso a internet");
             }
 
@@ -368,22 +382,89 @@ static void wifi_connect_task(const wifi_command_t* cmd)
 {
     memcpy(&last_cmd, cmd, sizeof(wifi_command_t));
 
-    ESP_LOGI(TAG, "Conectando a '%s'...", cmd->ssid);
+    ESP_LOGI(TAG, "Iniciando conexión a '%s'...", cmd->ssid);
+
+    // 1. Verificar si ya hay una conexión activa
+    wifi_ap_record_t current_ap;
+    bool is_connected = (esp_wifi_sta_get_ap_info(&current_ap) == ESP_OK);
+
+    if (is_connected)
+    {
+        ESP_LOGI(TAG, "Desconectando de red actual: '%s'", (char*)current_ap.ssid);
+
+        // Desconectar de forma segura
+        esp_err_t disconnect_err = esp_wifi_disconnect();
+        if (disconnect_err != ESP_OK)
+        {
+            ESP_LOGW(TAG, "Error en desconexión: %s", esp_err_to_name(disconnect_err));
+        }
+
+        // Esperar a que la desconexión se complete
+        // El evento WIFI_EVENT_STA_DISCONNECTED se disparará
+        ESP_LOGI(TAG, "Esperando desconexión completa...");
+        vTaskDelay(pdMS_TO_TICKS(1000)); // Dar tiempo para la desconexión
+
+        // Verificar que realmente se desconectó
+        int retry_count = 0;
+        while (esp_wifi_sta_get_ap_info(&current_ap) == ESP_OK && retry_count < 5)
+        {
+            ESP_LOGI(TAG, "Aún conectado, esperando... (intento %d)", retry_count + 1);
+            vTaskDelay(pdMS_TO_TICKS(500));
+            retry_count++;
+        }
+
+        if (retry_count >= 5)
+        {
+            ESP_LOGW(TAG, "Timeout esperando desconexión, continuando...");
+        }
+        else
+        {
+            ESP_LOGI(TAG, "Desconexión completada exitosamente");
+        }
+    }
+    else
+    {
+        ESP_LOGI(TAG, "No hay conexión activa, procediendo directamente...");
+    }
+
+    // 2. Configurar nueva red
+    ESP_LOGI(TAG, "Configurando nueva red: '%s'", cmd->ssid);
     wifi_config_t wifi_cfg = {0};
     strncpy((char*)wifi_cfg.sta.ssid, cmd->ssid, sizeof(wifi_cfg.sta.ssid) - 1);
     strncpy((char*)wifi_cfg.sta.password, cmd->password, sizeof(wifi_cfg.sta.password) - 1);
 
-    if (esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg) != ESP_OK)
+    // Configuraciones adicionales para mejorar la conexión
+    wifi_cfg.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
+    wifi_cfg.sta.pmf_cfg.capable = true;
+    wifi_cfg.sta.pmf_cfg.required = false;
+
+    esp_err_t config_err = esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg);
+    if (config_err != ESP_OK)
     {
-        cmd->response_callback("{\"status\":\"error\",\"detail\":\"config_failed\"}");
+        ESP_LOGE(TAG, "Error configurando WiFi: %s", esp_err_to_name(config_err));
+        if (cmd->response_callback)
+        {
+            cmd->response_callback("{\"status\":\"error\",\"detail\":\"config_failed\"}");
+        }
         return;
     }
 
-    if (esp_wifi_connect() != ESP_OK)
+    // 3. Intentar conexión
+    ESP_LOGI(TAG, "Iniciando conexión a '%s'...", cmd->ssid);
+    esp_err_t connect_err = esp_wifi_connect();
+    if (connect_err != ESP_OK)
     {
-        cmd->response_callback("{\"status\":\"error\",\"detail\":\"connect_failed\"}");
+        ESP_LOGE(TAG, "Error iniciando conexión: %s", esp_err_to_name(connect_err));
+        if (cmd->response_callback)
+        {
+            cmd->response_callback("{\"status\":\"error\",\"detail\":\"connect_failed\"}");
+        }
         return;
     }
+
+    ESP_LOGI(TAG, "Comando de conexión enviado, esperando eventos...");
+    // Los eventos WIFI_EVENT_STA_DISCONNECTED o IP_EVENT_STA_GOT_IP
+    // manejarán el resultado final
 }
 
 bool wifi_manager_send_command(const wifi_command_t* cmd)

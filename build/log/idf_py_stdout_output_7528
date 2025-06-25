@@ -1,17 +1,0 @@
-[1/9] Performing build step for 'bootloader'
-[1/1] C:\WINDOWS\system32\cmd.exe /C "cd /D D:\PROYECTOS-PERSONALES\CuidadoAbuelito\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.4_py3.10_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.4.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 D:/PROYECTOS-PERSONALES/CuidadoAbuelito/build/bootloader/bootloader.bin"
-Bootloader binary size 0x6580 bytes. 0xa80 bytes (9%) free.
-[2/9] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/wifi_manager.c.obj
-D:/PROYECTOS-PERSONALES/CuidadoAbuelito/main/wifi_manager.c: In function 'reason_str':
-D:/PROYECTOS-PERSONALES/CuidadoAbuelito/main/wifi_manager.c:29:9: warning: case label value exceeds maximum value for type [-Wswitch-outside-range]
-   29 |         case WIFI_REASON_NO_AP_FOUND:  return "no_ap";
-      |         ^~~~
-D:/PROYECTOS-PERSONALES/CuidadoAbuelito/main/wifi_manager.c:28:9: warning: case label value exceeds maximum value for type [-Wswitch-outside-range]
-   28 |         case WIFI_REASON_AUTH_FAIL:    return "auth_fail";
-      |         ^~~~
-D:/PROYECTOS-PERSONALES/CuidadoAbuelito/main/wifi_manager.c:30:9: warning: case label value exceeds maximum value for type [-Wswitch-outside-range]
-   30 |         case WIFI_REASON_ASSOC_FAIL:   return "assoc_fail";
-      |         ^~~~
-[3/9] No install step for 'bootloader'
-[4/9] Completed 'bootloader'
-[5/9] Linking C static library esp-idf\main\libmain.a
