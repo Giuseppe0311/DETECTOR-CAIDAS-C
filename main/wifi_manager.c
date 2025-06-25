@@ -188,12 +188,9 @@ static bool send_device_status(const char* ip_address)
         ESP_LOGI(TAG, "Device status enviado exitosamente (HTTP %d)", status_code);
         return true;
     }
-    else
-    {
-        ESP_LOGW(TAG, "Error enviando device status: err=%s, status=%d, content_length=%d",
-                 esp_err_to_name(err), status_code, content_length);
-        return false;
-    }
+    ESP_LOGW(TAG, "Error enviando device status: err=%s, status=%d, content_length=%d",
+             esp_err_to_name(err), status_code, content_length);
+    return false;
 }
 static const char* reason_str(int reason)
 {
