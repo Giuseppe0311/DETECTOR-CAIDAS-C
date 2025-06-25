@@ -1,9 +1,8 @@
-//
-// Created by barre on 6/24/2025.
-//
 #include "wifi_manager.h"
 
 #include <string.h>
+#include <stdio.h>
+#include <time.h>
 
 #include "cJSON.h"
 #include "esp_event.h"
@@ -12,14 +11,18 @@
 #include "esp_wifi.h"
 #include "esp_wifi_default.h"
 #include "esp_http_client.h"
+#include "esp_mac.h"
+#include "esp_random.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "nvs_flash.h"
-
+#include "nvs.h"
 
 static const char* TAG = "WIFI_MGR";
 static QueueHandle_t wifi_cmd_queue = NULL;
 static TaskHandle_t wifi_task_handle = NULL;
+
+static char device_uuid[37] = {0};
 
 // Guardamos el último comando para usar su callback en los handlers
 static wifi_command_t last_cmd;
@@ -30,6 +33,150 @@ static esp_event_handler_instance_t ip_event_inst;
 
 // Variable para controlar si debemos hacer test de conectividad
 static bool should_test_connectivity = false;
+
+// URL del servidor para reportar status
+static const char* DEVICE_STATUS_URL = "https://oldalert-server.vercel.app/api/device-status";
+
+// Función para generar UUID v4
+static void generate_uuid_v4(char* uuid_str)
+{
+    uint8_t uuid_bytes[16];
+
+    // Generar 16 bytes aleatorios
+    esp_fill_random(uuid_bytes, 16);
+
+    // Configurar bits de versión (versión 4)
+    uuid_bytes[6] = (uuid_bytes[6] & 0x0F) | 0x40;
+
+    // Configurar bits de variante (variante RFC)
+    uuid_bytes[8] = (uuid_bytes[8] & 0x3F) | 0x80;
+
+    // Formatear como string
+    snprintf(uuid_str, 37,
+             "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+             uuid_bytes[0], uuid_bytes[1], uuid_bytes[2], uuid_bytes[3],
+             uuid_bytes[4], uuid_bytes[5], uuid_bytes[6], uuid_bytes[7],
+             uuid_bytes[8], uuid_bytes[9], uuid_bytes[10], uuid_bytes[11],
+             uuid_bytes[12], uuid_bytes[13], uuid_bytes[14], uuid_bytes[15]);
+}
+
+// Función para obtener o generar UUID del dispositivo
+static void init_device_uuid(void)
+{
+    nvs_handle_t nvs_handle;
+    esp_err_t err;
+
+    // Abrir NVS
+    err = nvs_open("device", NVS_READWRITE, &nvs_handle);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Error abriendo NVS: %s", esp_err_to_name(err));
+        return;
+    }
+
+    // Intentar leer UUID existente
+    size_t uuid_len = sizeof(device_uuid);
+    err = nvs_get_str(nvs_handle, "uuid", device_uuid, &uuid_len);
+
+    if (err == ESP_ERR_NVS_NOT_FOUND)
+    {
+        // UUID no existe, generar uno nuevo
+        generate_uuid_v4(device_uuid);
+
+        // Guardar en NVS
+        err = nvs_set_str(nvs_handle, "uuid", device_uuid);
+        if (err == ESP_OK)
+        {
+            err = nvs_commit(nvs_handle);
+            if (err == ESP_OK)
+            {
+                ESP_LOGI(TAG, "UUID generado y guardado: %s", device_uuid);
+            }
+            else
+            {
+                ESP_LOGE(TAG, "Error guardando UUID: %s", esp_err_to_name(err));
+            }
+        }
+        else
+        {
+            ESP_LOGE(TAG, "Error escribiendo UUID: %s", esp_err_to_name(err));
+        }
+    }
+    else if (err == ESP_OK)
+    {
+        ESP_LOGI(TAG, "UUID cargado desde NVS: %s", device_uuid);
+    }
+    else
+    {
+        ESP_LOGE(TAG, "Error leyendo UUID: %s", esp_err_to_name(err));
+    }
+
+    nvs_close(nvs_handle);
+}
+
+// Función para enviar status del dispositivo al servidor
+static bool send_device_status(const char* ip_address)
+{
+    ESP_LOGI(TAG, "Enviando status del dispositivo al servidor...");
+
+    // Crear JSON del payload
+    cJSON* json = cJSON_CreateObject();
+    cJSON_AddStringToObject(json, "device_id", device_uuid);
+    cJSON_AddStringToObject(json, "ip", ip_address);
+
+    char* json_string = cJSON_PrintUnformatted(json);
+    cJSON_Delete(json);
+
+    if (!json_string)
+    {
+        ESP_LOGE(TAG, "Error creando JSON para device status");
+        return false;
+    }
+
+    ESP_LOGI(TAG, "Payload: %s", json_string);
+
+    // Configurar cliente HTTP
+    esp_http_client_config_t config = {
+        .url = DEVICE_STATUS_URL,
+        .method = HTTP_METHOD_POST,
+        .disable_auto_redirect = false,
+        .transport_type = HTTP_TRANSPORT_OVER_SSL,
+        .use_global_ca_store = false,
+        .skip_cert_common_name_check = true,
+        .cert_pem = NULL,
+    };
+
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (client == NULL)
+    {
+        ESP_LOGE(TAG, "Error inicializando cliente HTTP para device status");
+        free(json_string);
+        return false;
+    }
+
+    // Configurar headers
+    esp_http_client_set_header(client, "Content-Type", "application/json");
+    esp_http_client_set_post_field(client, json_string, strlen(json_string));
+
+    // Realizar petición
+    esp_err_t err = esp_http_client_perform(client);
+    int status_code = esp_http_client_get_status_code(client);
+
+    esp_http_client_cleanup(client);
+    free(json_string);
+
+    if (err == ESP_OK && (status_code >= 200 && status_code < 300))
+    {
+        ESP_LOGI(TAG, "Device status enviado exitosamente (HTTP %d)", status_code);
+        return true;
+    }
+    else
+    {
+        ESP_LOGW(TAG, "Error enviando device status: err=%s, status=%d",
+                 esp_err_to_name(err), status_code);
+        return false;
+    }
+}
 
 static const char* reason_str(int reason)
 {
@@ -58,7 +205,8 @@ static bool test_internet_connectivity(void)
     };
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
-    if (client == NULL) {
+    if (client == NULL)
+    {
         ESP_LOGE(TAG, "Error inicializando cliente HTTP");
         return false;
     }
@@ -67,12 +215,15 @@ static bool test_internet_connectivity(void)
     int status_code = esp_http_client_get_status_code(client);
     esp_http_client_cleanup(client);
 
-    if (err == ESP_OK && status_code == 200) {
+    if (err == ESP_OK && status_code == 200)
+    {
         ESP_LOGI(TAG, "Test de conectividad exitoso");
         return true;
-    } else {
+    }
+    else
+    {
         ESP_LOGW(TAG, "Test de conectividad falló: err=%s, status=%d",
-                esp_err_to_name(err), status_code);
+                 esp_err_to_name(err), status_code);
         return false;
     }
 }
@@ -90,7 +241,8 @@ static bool test_dns_connectivity(void)
     };
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
-    if (client == NULL) {
+    if (client == NULL)
+    {
         return false;
     }
 
@@ -139,8 +291,10 @@ static void ip_got_ip_handler(void* arg,
 // Tarea para testear conectividad (se ejecuta después de obtener IP)
 static void connectivity_test_task(void* pvParameters)
 {
-    while (1) {
-        if (should_test_connectivity) {
+    while (1)
+    {
+        if (should_test_connectivity)
+        {
             should_test_connectivity = false;
 
             // Esperamos un poco para que la conexión se estabilice
@@ -148,24 +302,60 @@ static void connectivity_test_task(void* pvParameters)
 
             bool has_internet = test_internet_connectivity();
 
-            if (!has_internet) {
+            if (!has_internet)
+            {
                 ESP_LOGW(TAG, "Test HTTP falló, probando DNS...");
                 vTaskDelay(pdMS_TO_TICKS(1000));
                 has_internet = test_dns_connectivity();
             }
 
-            char response[100];
-            if (has_internet) {
-                snprintf(response, sizeof(response),
-                        "{\"status\":\"success\",\"detail\":\"connected\"}");
+            char response[200];
+            if (has_internet)
+            {
+                // Obtener IP actual para reportar al servidor
+                esp_netif_t* netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+                esp_netif_ip_info_t ip_info;
+
+                if (esp_netif_get_ip_info(netif, &ip_info) == ESP_OK)
+                {
+                    char ip_str[16];
+                    sprintf(ip_str, IPSTR, IP2STR(&ip_info.ip));
+
+                    // Enviar status del dispositivo al servidor
+                    bool status_sent = send_device_status(ip_str);
+
+                    if (status_sent)
+                    {
+                        snprintf(response, sizeof(response),
+                                 "{\"status\":\"success\",\"detail\":\"connected\",\"ip\":\"%s\",\"device_id\":\"%s\",\"server_notified\":true}",
+                                 ip_str, device_uuid);
+                    }
+                    else
+                    {
+                        snprintf(response, sizeof(response),
+                                 "{\"status\":\"success\",\"detail\":\"connected\",\"ip\":\"%s\",\"device_id\":\"%s\",\"server_notified\":false}",
+                                 ip_str, device_uuid);
+                    }
+                }
+                else
+                {
+                    snprintf(response, sizeof(response),
+                             "{\"status\":\"success\",\"detail\":\"connected\",\"device_id\":\"%s\"}",
+                             device_uuid);
+                }
+
                 ESP_LOGI(TAG, "WiFi conectado con acceso a internet");
-            } else {
+            }
+            else
+            {
                 snprintf(response, sizeof(response),
-                        "{\"status\":\"error\",\"detail\":\"no_internet\"}");
+                         "{\"status\":\"error\",\"detail\":\"no_internet\",\"device_id\":\"%s\"}",
+                         device_uuid);
                 ESP_LOGW(TAG, "WiFi conectado sin acceso a internet");
             }
 
-            if (last_cmd.response_callback) {
+            if (last_cmd.response_callback)
+            {
                 last_cmd.response_callback(response);
             }
         }
@@ -179,8 +369,6 @@ static void wifi_connect_task(const wifi_command_t* cmd)
     memcpy(&last_cmd, cmd, sizeof(wifi_command_t));
 
     ESP_LOGI(TAG, "Conectando a '%s'...", cmd->ssid);
-    esp_wifi_disconnect();
-
     wifi_config_t wifi_cfg = {0};
     strncpy((char*)wifi_cfg.sta.ssid, cmd->ssid, sizeof(wifi_cfg.sta.ssid) - 1);
     strncpy((char*)wifi_cfg.sta.password, cmd->password, sizeof(wifi_cfg.sta.password) - 1);
@@ -322,8 +510,14 @@ static void wifi_manager_task(void* pvParameters)
                 break;
 
             case WIFI_CMD_GET_STATUS:
-                // Enviar estado actual
-                // send_ble_response("{\"status\":\"idle\"}");
+                // Enviar estado actual con UUID del dispositivo
+                char status_response[100];
+                snprintf(status_response, sizeof(status_response),
+                         "{\"status\":\"idle\",\"device_id\":\"%s\"}", device_uuid);
+                if (cmd.response_callback)
+                {
+                    cmd.response_callback(status_response);
+                }
                 break;
             }
         }
@@ -340,6 +534,8 @@ void wifi_manager_init(void)
     }
     nvs_flash_init();
     esp_netif_init();
+    // Inicializar UUID del dispositivo
+    init_device_uuid();
     esp_event_loop_create_default();
     esp_netif_create_default_wifi_sta();
 
@@ -362,5 +558,5 @@ void wifi_manager_init(void)
     // Crear tarea para test de conectividad
     xTaskCreate(connectivity_test_task, "conn_test", 4096, NULL, 4, NULL);
 
-    ESP_LOGI(TAG, "WiFi Manager inicializado");
+    ESP_LOGI(TAG, "WiFi Manager inicializado con device_id: %s", device_uuid);
 }
