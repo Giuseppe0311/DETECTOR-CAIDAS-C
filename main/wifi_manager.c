@@ -11,6 +11,7 @@
 #include "esp_netif.h"
 #include "esp_wifi.h"
 #include "esp_wifi_default.h"
+#include "esp_http_client.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "nvs_flash.h"
@@ -27,6 +28,9 @@ static wifi_command_t last_cmd;
 static esp_event_handler_instance_t wifi_event_inst;
 static esp_event_handler_instance_t ip_event_inst;
 
+// Variable para controlar si debemos hacer test de conectividad
+static bool should_test_connectivity = false;
+
 static const char* reason_str(int reason)
 {
     switch (reason)
@@ -41,6 +45,62 @@ static const char* reason_str(int reason)
     }
 }
 
+// Función para testear conectividad a internet
+static bool test_internet_connectivity(void)
+{
+    ESP_LOGI(TAG, "Testeando conectividad a internet...");
+
+    esp_http_client_config_t config = {
+        .url = "http://httpbin.org/get",
+        .method = HTTP_METHOD_GET,
+        .timeout_ms = 5000,
+        .disable_auto_redirect = true,
+    };
+
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (client == NULL) {
+        ESP_LOGE(TAG, "Error inicializando cliente HTTP");
+        return false;
+    }
+
+    esp_err_t err = esp_http_client_perform(client);
+    int status_code = esp_http_client_get_status_code(client);
+    esp_http_client_cleanup(client);
+
+    if (err == ESP_OK && status_code == 200) {
+        ESP_LOGI(TAG, "Test de conectividad exitoso");
+        return true;
+    } else {
+        ESP_LOGW(TAG, "Test de conectividad falló: err=%s, status=%d",
+                esp_err_to_name(err), status_code);
+        return false;
+    }
+}
+
+// Función alternativa usando ping DNS
+static bool test_dns_connectivity(void)
+{
+    ESP_LOGI(TAG, "Testeando conectividad DNS...");
+
+    esp_http_client_config_t config = {
+        .url = "http://8.8.8.8",
+        .method = HTTP_METHOD_HEAD,
+        .timeout_ms = 3000,
+        .disable_auto_redirect = true,
+    };
+
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (client == NULL) {
+        return false;
+    }
+
+    esp_err_t err = esp_http_client_perform(client);
+    esp_http_client_cleanup(client);
+
+    // Cualquier respuesta indica que hay conectividad
+    return (err == ESP_OK || err == ESP_ERR_HTTP_CONNECT);
+}
+
 // Handler: desconexión WiFi (fallo de conexión)
 static void wifi_disconnect_handler(void* arg,
                                     esp_event_base_t base,
@@ -52,13 +112,15 @@ static void wifi_disconnect_handler(void* arg,
 
     char buf[80];
     snprintf(buf, sizeof(buf),
-             "{\"status\":\"connect_failed\",\"reason\":\"%s\"}",
+             "{\"status\":\"error\",\"detail\":\"%s\"}",
              reason_str(d->reason));
 
     if (last_cmd.response_callback)
     {
         last_cmd.response_callback(buf);
     }
+
+    should_test_connectivity = false;
 }
 
 // Handler: IP obtenida (conexión exitosa)
@@ -68,19 +130,49 @@ static void ip_got_ip_handler(void* arg,
                               void* event_data)
 {
     ip_event_got_ip_t* ip_info = event_data;
-    ESP_LOGI(TAG, "¡Conectado! IP: " IPSTR, IP2STR(&ip_info->ip_info.ip));
+    ESP_LOGI(TAG, "¡IP obtenida! IP: " IPSTR, IP2STR(&ip_info->ip_info.ip));
 
-    char buf[80];
-    snprintf(buf, sizeof(buf),
-             "{\"status\":\"connected\",\"ip\":\"" IPSTR "\"}",
-             IP2STR(&ip_info->ip_info.ip));
-
-    if (last_cmd.response_callback)
-    {
-        last_cmd.response_callback(buf);
-    }
+    // Marcamos que debemos testear conectividad
+    should_test_connectivity = true;
 }
 
+// Tarea para testear conectividad (se ejecuta después de obtener IP)
+static void connectivity_test_task(void* pvParameters)
+{
+    while (1) {
+        if (should_test_connectivity) {
+            should_test_connectivity = false;
+
+            // Esperamos un poco para que la conexión se estabilice
+            vTaskDelay(pdMS_TO_TICKS(2000));
+
+            bool has_internet = test_internet_connectivity();
+
+            if (!has_internet) {
+                ESP_LOGW(TAG, "Test HTTP falló, probando DNS...");
+                vTaskDelay(pdMS_TO_TICKS(1000));
+                has_internet = test_dns_connectivity();
+            }
+
+            char response[100];
+            if (has_internet) {
+                snprintf(response, sizeof(response),
+                        "{\"status\":\"success\",\"detail\":\"connected\"}");
+                ESP_LOGI(TAG, "WiFi conectado con acceso a internet");
+            } else {
+                snprintf(response, sizeof(response),
+                        "{\"status\":\"error\",\"detail\":\"no_internet\"}");
+                ESP_LOGW(TAG, "WiFi conectado sin acceso a internet");
+            }
+
+            if (last_cmd.response_callback) {
+                last_cmd.response_callback(response);
+            }
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
 
 static void wifi_connect_task(const wifi_command_t* cmd)
 {
@@ -95,22 +187,16 @@ static void wifi_connect_task(const wifi_command_t* cmd)
 
     if (esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg) != ESP_OK)
     {
-        cmd->response_callback("{\"error\":\"config_failed\"}");
+        cmd->response_callback("{\"status\":\"error\",\"detail\":\"config_failed\"}");
         return;
     }
 
     if (esp_wifi_connect() != ESP_OK)
     {
-        cmd->response_callback("{\"status\":\"connect_failed\"}");
+        cmd->response_callback("{\"status\":\"error\",\"detail\":\"connect_failed\"}");
         return;
     }
-
-    if (cmd->response_callback)
-    {
-        cmd->response_callback("{\"status\":\"connecting\"}");
-    }
 }
-
 
 bool wifi_manager_send_command(const wifi_command_t* cmd)
 {
@@ -231,6 +317,7 @@ static void wifi_manager_task(void* pvParameters)
 
             case WIFI_CMD_DISCONNECT:
                 esp_wifi_disconnect();
+                should_test_connectivity = false;
                 // send_ble_response("{\"status\":\"disconnected\"}");
                 break;
 
@@ -271,6 +358,9 @@ void wifi_manager_init(void)
 
     // Crear tarea WiFi
     xTaskCreate(wifi_manager_task, "wifi_mgr", 4096, NULL, 5, &wifi_task_handle);
+
+    // Crear tarea para test de conectividad
+    xTaskCreate(connectivity_test_task, "conn_test", 4096, NULL, 4, NULL);
 
     ESP_LOGI(TAG, "WiFi Manager inicializado");
 }
