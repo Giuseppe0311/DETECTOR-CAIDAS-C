@@ -1,0 +1,256 @@
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3860
+entry 0x4008063c
+[0;32mI (31) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Jun 25 2025 14:40:23[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v3.1[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 4MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00300000[0m
+[0;32mI (79) boot:  3 storage          Unknown data     01 82 00310000 000e0000[0m
+[0;32mI (86) boot:  4 config           WiFi data        01 02 003f0000 00010000[0m
+[0;32mI (92) boot: End of partition table[0m
+[0;32mI (95) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=37880h (227456) map[0m
+[0;32mI (181) esp_image: segment 1: paddr=000478a8 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (181) esp_image: segment 2: paddr=000478cc vaddr=3ffbdb60 size=05cech ( 23788) load[0m
+[0;32mI (193) esp_image: segment 3: paddr=0004d5c0 vaddr=40080000 size=02a58h ( 10840) load[0m
+[0;32mI (198) esp_image: segment 4: paddr=00050020 vaddr=400d0020 size=1001fch (1049084) map[0m
+[0;32mI (558) esp_image: segment 5: paddr=00150224 vaddr=40082a58 size=14fe8h ( 85992) load[0m
+[0;32mI (603) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (604) boot: Disabling RNG early entropy source...[0m
+[0;32mI (614) cpu_start: Multicore app[0m
+[0;32mI (622) cpu_start: Pro cpu start user code[0m
+[0;32mI (623) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (623) app_init: Application information:[0m
+[0;32mI (623) app_init: Project name:     cuidado_abu[0m
+[0;32mI (627) app_init: App version:      27ae051-dirty[0m
+[0;32mI (631) app_init: Compile time:     Jun 25 2025 14:49:19[0m
+[0;32mI (636) app_init: ELF file SHA256:  7ce7087b6...[0m
+[0;32mI (641) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (645) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (648) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (652) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (656) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (663) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (668) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (673) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (678) heap_init: At 3FFCC080 len 00013F80 (79 KiB): DRAM[0m
+[0;32mI (683) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (688) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (694) heap_init: At 40097A40 len 000085C0 (33 KiB): IRAM[0m
+[0;32mI (701) spi_flash: detected chip: generic[0m
+[0;32mI (703) spi_flash: flash io: dio[0m
+[0;33mW (706) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (716) coexist: coex firmware version: e727207[0m
+[0;32mI (721) main_task: Started on CPU0[0m
+[0;32mI (731) main_task: Calling app_main()[0m
+[0;32mI (731) MPU6050: MPU6050 inicializado[0m
+[0;32mI (761) WIFI_MGR: UUID cargado desde NVS: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (771) wifi:wifi driver task: 3ffd0664, prio:23, stack:6656, core=0[0m
+[0;32mI (781) wifi:wifi firmware version: 79fa3f41ba[0m
+[0;32mI (781) wifi:wifi certification version: v7.0[0m
+[0;32mI (781) wifi:config NVS flash: enabled[0m
+[0;32mI (781) wifi:config nano formatting: disabled[0m
+[0;32mI (791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (791) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (791) wifi:Init management short buffer num: 32[0m
+[0;32mI (801) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (801) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (811) wifi:Init static rx buffer num: 10[0m
+[0;32mI (811) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (821) wifi_init: rx ba win: 6[0m
+[0;32mI (821) wifi_init: accept mbox: 6[0m
+[0;32mI (821) wifi_init: tcpip mbox: 32[0m
+[0;32mI (821) wifi_init: udp mbox: 6[0m
+[0;32mI (831) wifi_init: tcp mbox: 6[0m
+[0;32mI (831) wifi_init: tcp tx win: 5760[0m
+[0;32mI (831) wifi_init: tcp rx win: 5760[0m
+[0;32mI (841) wifi_init: tcp mss: 1440[0m
+[0;32mI (841) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (931) wifi:mode : sta (ec:64:c9:5d:de:a8)[0m
+[0;32mI (931) wifi:enable tsf[0m
+[0;32mI (931) WIFI_MGR: WiFi Manager inicializado con device_id: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (931) BLE_ADV: Inicializando BLE con nombre: CUIDADO ABUELITO[0m
+[0;32mI (941) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (941) BTDM_INIT: Bluetooth MAC: ec:64:c9:5d:de:aa[0m
+[0;32mI (1271) BLE_ADV: GATT Server registrado[0m
+[0;32mI (1281) BLE_ADV: Servicio creado, handle: 40[0m
+[0;32mI (1281) BLE_ADV: Servicio iniciado[0m
+[0;32mI (1281) BLE_ADV: Característica añadida, handle: 42, step: 1[0m
+[0;32mI (1281) BLE_ADV: Característica RX añadida, handle: 42[0m
+[0;32mI (1281) BLE_ADV: Característica añadida, handle: 44, step: 2[0m
+[0;32mI (1291) BLE_ADV: Característica TX añadida, handle: 44[0m
+[0;32mI (1301) BLE_ADV: Datos de advertising configurados[0m
+[0;32mI (1311) MPU6050: ACCEL  X=   694  Y=  8996  Z= 13286[0m
+[0;32mI (1311) BLE_ADV: Scan response configurado[0m
+[0;32mI (1311) MPU6050: GYRO   X=  -328  Y=  -235  Z=   -75[0m
+[0;32mI (1311) main_task: Returned from app_main()[0m
+[0;32mI (1331) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (1821) MPU6050: ACCEL  X=   788  Y=  9076  Z= 13268[0m
+[0;32mI (1821) MPU6050: GYRO   X=  -334  Y=  -228  Z=   -68[0m
+[0;32mI (2321) MPU6050: ACCEL  X=   746  Y=  9058  Z= 13262[0m
+[0;32mI (2321) MPU6050: GYRO   X=  -326  Y=  -231  Z=   -86[0m
+[0;32mI (2821) MPU6050: ACCEL  X=   710  Y=  9052  Z= 13222[0m
+[0;32mI (2821) MPU6050: GYRO   X=  -326  Y=  -225  Z=   -84[0m
+[0;32mI (3321) MPU6050: ACCEL  X=   752  Y=  8924  Z= 13170[0m
+[0;32mI (3321) MPU6050: GYRO   X=  -335  Y=  -236  Z=   -79[0m
+[0;32mI (3821) MPU6050: ACCEL  X=   672  Y=  8970  Z= 13262[0m
+[0;32mI (3821) MPU6050: GYRO   X=  -320  Y=  -223  Z=   -81[0m
+[0;32mI (4321) MPU6050: ACCEL  X=   806  Y=  9068  Z= 13226[0m
+[0;32mI (4321) MPU6050: GYRO   X=  -322  Y=  -230  Z=   -82[0m
+[0;32mI (4821) MPU6050: ACCEL  X=   846  Y=  8948  Z= 13270[0m
+[0;32mI (4821) MPU6050: GYRO   X=  -342  Y=  -243  Z=   -82[0m
+[0;32mI (5321) MPU6050: ACCEL  X=   626  Y=  8980  Z= 13240[0m
+[0;32mI (5321) MPU6050: GYRO   X=  -328  Y=  -236  Z=   -84[0m
+[0;32mI (5821) MPU6050: ACCEL  X=   828  Y=  9004  Z= 13186[0m
+[0;32mI (5821) MPU6050: GYRO   X=  -342  Y=  -243  Z=   -72[0m
+[0;32mI (6321) MPU6050: ACCEL  X=   728  Y=  9040  Z= 13182[0m
+[0;32mI (6321) MPU6050: GYRO   X=  -330  Y=  -241  Z=   -77[0m
+[0;32mI (6821) MPU6050: ACCEL  X=   778  Y=  9106  Z= 13278[0m
+[0;32mI (6821) MPU6050: GYRO   X=  -323  Y=  -223  Z=   -76[0m
+[0;32mI (7321) MPU6050: ACCEL  X=   730  Y=  9050  Z= 13198[0m
+[0;32mI (7321) MPU6050: GYRO   X=  -344  Y=  -238  Z=   -79[0m
+[0;32mI (7821) MPU6050: ACCEL  X=   730  Y=  9044  Z= 13274[0m
+[0;32mI (7821) MPU6050: GYRO   X=  -338  Y=  -230  Z=   -81[0m
+[0;32mI (8321) MPU6050: ACCEL  X=   450  Y=  7424  Z= 13566[0m
+[0;32mI (8321) MPU6050: GYRO   X=  -772  Y=  1473  Z= -1000[0m
+[0;32mI (8821) MPU6050: ACCEL  X= -3892  Y= 10920  Z= 16858[0m
+[0;32mI (8821) MPU6050: GYRO   X= 19406  Y=  8657  Z=  4238[0m
+[0;32mI (9321) MPU6050: ACCEL  X=  6504  Y=  8474  Z=  4750[0m
+[0;32mI (9321) MPU6050: GYRO   X=  -256  Y= -7233  Z= -2717[0m
+[0;32mI (9821) MPU6050: ACCEL  X=  2304  Y= 16102  Z= -2662[0m
+[0;32mI (9821) MPU6050: GYRO   X= -6709  Y=  2126  Z=   -96[0m
+[0;32mI (10321) MPU6050: ACCEL  X=  4630  Y= 16176  Z= -1792[0m
+[0;32mI (10321) MPU6050: GYRO   X=   238  Y=   148  Z=   647[0m
+[0;32mI (10821) MPU6050: ACCEL  X=  5500  Y= 15422  Z= -1080[0m
+[0;32mI (10821) MPU6050: GYRO   X=   378  Y=  -353  Z=   368[0m
+[0;32mI (11321) MPU6050: ACCEL  X=  6150  Y= 15992  Z= -2062[0m
+[0;32mI (11321) MPU6050: GYRO   X=  -492  Y=   -71  Z=   625[0m
+[0;32mI (11821) MPU6050: ACCEL  X=  5172  Y= 15080  Z= -2988[0m
+[0;32mI (11821) MPU6050: GYRO   X=  -547  Y=  -611  Z=  -222[0m
+[0;32mI (12321) MPU6050: ACCEL  X=  6416  Y= 15500  Z= -1946[0m
+[0;32mI (12321) MPU6050: GYRO   X=  -270  Y=   193  Z=  -116[0m
+[0;32mI (12821) MPU6050: ACCEL  X=  6220  Y= 14980  Z=  -850[0m
+[0;32mI (12821) MPU6050: GYRO   X=  -820  Y=    74  Z=   360[0m
+[0;32mI (13321) MPU6050: ACCEL  X=  5896  Y= 15378  Z= -2054[0m
+[0;32mI (13321) MPU6050: GYRO   X=  -438  Y=  -303  Z=  -367[0m
+[0;32mI (13821) MPU6050: ACCEL  X=  6096  Y= 14808  Z= -2044[0m
+[0;32mI (13821) MPU6050: GYRO   X=  -211  Y=  -720  Z=   181[0m
+[0;32mI (14321) MPU6050: ACCEL  X=  5224  Y= 15566  Z= -2562[0m
+[0;32mI (14321) MPU6050: GYRO   X= -1146  Y=  -468  Z=   -82[0m
+[0;32mI (14821) MPU6050: ACCEL  X=  5396  Y= 15566  Z= -1474[0m
+[0;32mI (14821) MPU6050: GYRO   X=  -424  Y=  -715  Z=  -743[0m
+[0;32mI (15321) MPU6050: ACCEL  X=  6874  Y= 15350  Z= -1158[0m
+[0;32mI (15321) MPU6050: GYRO   X=  -581  Y=   537  Z=   531[0m
+[0;32mI (15821) MPU6050: ACCEL  X=  5662  Y= 15180  Z= -1818[0m
+[0;32mI (15821) MPU6050: GYRO   X=  -690  Y=  -357  Z=  -491[0m
+[0;32mI (16321) MPU6050: ACCEL  X=  8068  Y= 13554  Z= -1548[0m
+[0;32mI (16321) MPU6050: GYRO   X=  3674  Y=  2030  Z=-11912[0m
+[0;32mI (16821) MPU6050: ACCEL  X=-18602  Y=  -576  Z= -5942[0m
+[0;32mI (16821) MPU6050: GYRO   X= -3600  Y= -6240  Z= -6257[0m
+[0;32mI (17321) MPU6050: ACCEL  X=-16062  Y=   -38  Z= -2408[0m
+[0;32mI (17321) MPU6050: GYRO   X=  -816  Y= -2265  Z=   960[0m
+[0;32mI (17821) MPU6050: ACCEL  X=-16014  Y=   218  Z= -2140[0m
+[0;32mI (17821) MPU6050: GYRO   X=  -560  Y=  -415  Z=  -102[0m
+[0;32mI (18321) MPU6050: ACCEL  X=-16058  Y=   494  Z= -1106[0m
+[0;32mI (18321) MPU6050: GYRO   X=  -187  Y= -1739  Z=   533[0m
+[0;32mI (18821) MPU6050: ACCEL  X=-16060  Y=   452  Z=  -976[0m
+[0;32mI (18821) MPU6050: GYRO   X=  -535  Y=  -515  Z=  -249[0m
+[0;32mI (19321) MPU6050: ACCEL  X=-16056  Y=   452  Z=  -686[0m
+[0;32mI (19321) MPU6050: GYRO   X=   -46  Y=   185  Z=    28[0m
+[0;32mI (19821) MPU6050: ACCEL  X=-16054  Y=   420  Z=  -606[0m
+[0;32mI (19821) MPU6050: GYRO   X=  -492  Y=  -582  Z=   -38[0m
+[0;32mI (20321) MPU6050: ACCEL  X=-16064  Y=   636  Z=  -740[0m
+[0;32mI (20321) MPU6050: GYRO   X=  -386  Y=  -196  Z=   -47[0m
+[0;32mI (20821) MPU6050: ACCEL  X=-16058  Y=   454  Z=  -456[0m
+[0;32mI (20821) MPU6050: GYRO   X=  -444  Y=  -613  Z=    96[0m
+[0;32mI (21321) MPU6050: ACCEL  X=-16076  Y=   692  Z=  -670[0m
+[0;32mI (21321) MPU6050: GYRO   X=  -379  Y=  -104  Z=   -77[0m
+[0;32mI (21821) MPU6050: ACCEL  X=-16050  Y=   550  Z=  -402[0m
+[0;32mI (21821) MPU6050: GYRO   X=  -537  Y=  -681  Z=     9[0m
+[0;32mI (22321) MPU6050: ACCEL  X=-16028  Y=   822  Z=  -606[0m
+[0;32mI (22321) MPU6050: GYRO   X=  -413  Y=  -200  Z=   153[0m
+[0;32mI (22821) MPU6050: ACCEL  X=-16056  Y=   540  Z=  -256[0m
+[0;32mI (22821) MPU6050: GYRO   X=  -318  Y=  -246  Z=   -42[0m
+[0;32mI (23321) MPU6050: ACCEL  X=-16030  Y=   880  Z=  -346[0m
+[0;32mI (23321) MPU6050: GYRO   X=  -629  Y=  -463  Z=   -28[0m
+[0;32mI (23821) MPU6050: ACCEL  X=-18896  Y=  1068  Z=  -552[0m
+[0;32mI (23821) MPU6050: GYRO   X=  2274  Y=  2691  Z=  9488[0m
+[0;32mI (24321) MPU6050: ACCEL  X=  -292  Y= 12214  Z= -5902[0m
+[0;32mI (24321) MPU6050: GYRO   X=   957  Y=  1449  Z= 23174[0m
+[0;32mI (24821) MPU6050: ACCEL  X=  7880  Y= 14338  Z= -2816[0m
+[0;32mI (24821) MPU6050: GYRO   X=  -354  Y= -1021  Z=   187[0m
+[0;32mI (25321) MPU6050: ACCEL  X=  6704  Y= 14852  Z= -2704[0m
+[0;32mI (25321) MPU6050: GYRO   X=  -459  Y=   437  Z=  -870[0m
+[0;32mI (25821) MPU6050: ACCEL  X=  5486  Y= 15260  Z= -3452[0m
+[0;32mI (25821) MPU6050: GYRO   X=  -912  Y=  -134  Z=  -683[0m
+[0;32mI (26321) MPU6050: ACCEL  X=  5852  Y= 14960  Z= -1516[0m
+[0;32mI (26321) MPU6050: GYRO   X=  -546  Y=  -525  Z=   132[0m
+[0;32mI (26821) MPU6050: ACCEL  X=  5900  Y= 16008  Z= -2730[0m
+[0;32mI (26821) MPU6050: GYRO   X=  -909  Y=   267  Z=   -52[0m
+[0;32mI (27321) MPU6050: ACCEL  X=  1748  Y=  7522  Z=-14686[0m
+[0;32mI (27321) MPU6050: GYRO   X= 10911  Y=    -1  Z=  2709[0m
+[0;32mI (27821) MPU6050: ACCEL  X=  6426  Y= -3566  Z=-16292[0m
+[0;32mI (27821) MPU6050: GYRO   X=  3389  Y=   415  Z= -3435[0m
+[0;32mI (28321) MPU6050: ACCEL  X=  4940  Y= -4404  Z=-16410[0m
+[0;32mI (28321) MPU6050: GYRO   X=  -514  Y=   368  Z=  -345[0m
+[0;32mI (28821) MPU6050: ACCEL  X=  4722  Y= -4242  Z=-15850[0m
+[0;32mI (28821) MPU6050: GYRO   X=  -386  Y=  -231  Z=   263[0m
+[0;32mI (29321) MPU6050: ACCEL  X=  5752  Y= -4326  Z=-16396[0m
+[0;32mI (29321) MPU6050: GYRO   X=  -672  Y=   -39  Z=  -308[0m
+[0;32mI (29821) MPU6050: ACCEL  X=  4504  Y= -4092  Z=-15970[0m
+[0;32mI (29821) MPU6050: GYRO   X=  -510  Y=  -141  Z=    64[0m
+[0;32mI (30321) MPU6050: ACCEL  X=  5494  Y= -3160  Z=-16534[0m
+[0;32mI (30321) MPU6050: GYRO   X= -2042  Y= -1191  Z=   -97[0m
+[0;32mI (30821) MPU6050: ACCEL  X=  5400  Y= -1264  Z=-16446[0m
+[0;32mI (30821) MPU6050: GYRO   X= -6160  Y=   609  Z=   187[0m
+[0;32mI (31321) MPU6050: ACCEL  X=  5768  Y=  1898  Z=-16494[0m
+[0;32mI (31321) MPU6050: GYRO   X= -2643  Y=  -269  Z= -2715[0m
+[0;32mI (31821) MPU6050: ACCEL  X=  5210  Y=  3928  Z=-16036[0m
+[0;32mI (31821) MPU6050: GYRO   X=   214  Y= -1233  Z=  -508[0m
+[0;32mI (32321) MPU6050: ACCEL  X=  5650  Y=  4728  Z=-15768[0m
+[0;32mI (32321) MPU6050: GYRO   X= -1286  Y=   474  Z=   295[0m
+[0;32mI (32821) MPU6050: ACCEL  X=  5292  Y=  3888  Z=-16708[0m
+[0;32mI (32821) MPU6050: GYRO   X=  -524  Y=  -464  Z=  -242[0m
+[0;32mI (33321) MPU6050: ACCEL  X=  5256  Y=  4946  Z=-15122[0m
+[0;32mI (33321) MPU6050: GYRO   X=   336  Y=  -677  Z=  -187[0m
+[0;32mI (33821) MPU6050: ACCEL  X=  5650  Y=  7054  Z=-15176[0m
+[0;32mI (33821) MPU6050: GYRO   X= -2789  Y=   795  Z= -1845[0m
+[0;32mI (34321) MPU6050: ACCEL  X=  4356  Y= 11512  Z=-11862[0m
+[0;32mI (34321) MPU6050: GYRO   X=-14769  Y=   424  Z= -3624[0m
+[0;32mI (34821) MPU6050: ACCEL  X=  2788  Y= 15214  Z= -6570[0m
+[0;32mI (34821) MPU6050: GYRO   X= -1345  Y=   306  Z=   395[0m
+[0;32mI (35321) MPU6050: ACCEL  X=  3868  Y= 15322  Z= -5572[0m
+[0;32mI (35321) MPU6050: GYRO   X=  -451  Y=  -564  Z=  -364[0m
+[0;32mI (35821) MPU6050: ACCEL  X=  3210  Y= 15208  Z= -4846[0m
+[0;32mI (35821) MPU6050: GYRO   X=  -377  Y=   -82  Z=   151[0m
+[0;32mI (36321) MPU6050: ACCEL  X=  3924  Y= 15750  Z= -5164[0m
+[0;32mI (36321) MPU6050: GYRO   X=  -501  Y=   121  Z=  -307[0m
+[0;32mI (36821) MPU6050: ACCEL  X=  3294  Y= 15204  Z= -4204[0m
+[0;32mI (36821) MPU6050: GYRO   X=  -253  Y=  -408  Z=    99[0m
+[0;32mI (37321) MPU6050: ACCEL  X=  4106  Y= 15756  Z= -4916[0m
+[0;32mI (37321) MPU6050: GYRO   X=  -698  Y=  -470  Z=    71[0m
+[0;32mI (37821) MPU6050: ACCEL  X=  3902  Y= 15282  Z= -1330[0m
+[0;32mI (37821) MPU6050: GYRO   X= -4935  Y=   117  Z=   469[0m
+[0;32mI (38321) MPU6050: ACCEL  X=  6290  Y= 11410  Z=  8734[0m
+[0;32mI (38321) MPU6050: GYRO   X=-10036  Y=  5030  Z=  8947[0m
+[0;32mI (38821) MPU6050: ACCEL  X=  2572  Y=  5906  Z= 14818[0m
+[0;32mI (38821) MPU6050: GYRO   X= -1667  Y=  1111  Z= -1563[0m
+[0;32mI (39321) MPU6050: ACCEL  X=  1006  Y=  4330  Z= 14742[0m
+[0;32mI (39321) 
