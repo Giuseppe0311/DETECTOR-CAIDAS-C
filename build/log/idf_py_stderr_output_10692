@@ -1,1 +1,0 @@
-warning:  IRAM overflow detected!: output section or its part .iram0.text(addr: 1074397184, size: 43) does not fit into any memory region and will be assigned to the preceding iram0_0_seg memory region
