@@ -139,7 +139,7 @@ static bool send_device_status(const char* ip_address)
     // Configurar cliente HTTP
     esp_http_client_config_t config = {
         .url = DEVICE_STATUS_URL,
-        .method = HTTP_METHOD_POST,  // Especificar método explícitamente
+        .method = HTTP_METHOD_POST, // Especificar método explícitamente
         .transport_type = HTTP_TRANSPORT_OVER_SSL,
         .use_global_ca_store = true,
         .disable_auto_redirect = false,
@@ -172,9 +172,11 @@ static bool send_device_status(const char* ip_address)
 
     // Leer respuesta del servidor para debug
     char response_buffer[512] = {0};
-    if (content_length > 0 && content_length < sizeof(response_buffer)) {
+    if (content_length > 0 && content_length < sizeof(response_buffer))
+    {
         int data_read = esp_http_client_read_response(client, response_buffer, sizeof(response_buffer) - 1);
-        if (data_read > 0) {
+        if (data_read > 0)
+        {
             response_buffer[data_read] = '\0';
             ESP_LOGI(TAG, "Respuesta del servidor: %s", response_buffer);
         }
@@ -192,6 +194,7 @@ static bool send_device_status(const char* ip_address)
              esp_err_to_name(err), status_code, content_length);
     return false;
 }
+
 static const char* reason_str(int reason)
 {
     switch (reason)
@@ -339,21 +342,19 @@ static void connectivity_test_task(void* pvParameters)
                     if (status_sent)
                     {
                         snprintf(response, sizeof(response),
-                                 "{\"status\":\"success\",\"detail\":\"connected\",\"ip\":\"%s\",\"device_id\":\"%s\",\"server_notified\":true}",
+                                 "{\"status\":\"success\",\"detail\":\"connected\",\"ip\":\"%s\",\"device_id\":\"%s\"}",
                                  ip_str, device_uuid);
                     }
                     else
                     {
                         snprintf(response, sizeof(response),
-                                 "{\"status\":\"success\",\"detail\":\"connected\",\"ip\":\"%s\",\"device_id\":\"%s\",\"server_notified\":false}",
-                                 ip_str, device_uuid);
+                                 "{\"status\":\"error\",\"detail\":\"no_internet\"}");
                     }
                 }
                 else
                 {
                     snprintf(response, sizeof(response),
-                             "{\"status\":\"success\",\"detail\":\"connected\",\"device_id\":\"%s\"}",
-                             device_uuid);
+                             "{\"status\":\"error\",\"detail\":\"no_internet\"}");
                 }
 
                 ESP_LOGI(TAG, "WiFi conectado con acceso a internet");
@@ -532,7 +533,8 @@ static void wifi_scan_task(const wifi_command_t* cmd)
         if (cmd->response_callback) cmd->response_callback("{\"error\":\"json_failed\"}");
         return;
     }
-    if (cmd->response_callback) {
+    if (cmd->response_callback)
+    {
         cmd->response_callback(json_str);
     }
     ESP_LOGI(TAG, "Escaneo WiFi completado, %d redes encontradas", ap_count);

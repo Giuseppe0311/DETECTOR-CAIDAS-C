@@ -1,0 +1,255 @@
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3860
+entry 0x4008063c
+[0;32mI (31) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Jun 25 2025 14:40:23[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v3.1[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 4MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00300000[0m
+[0;32mI (79) boot:  3 storage          Unknown data     01 82 00310000 000e0000[0m
+[0;32mI (86) boot:  4 config           WiFi data        01 02 003f0000 00010000[0m
+[0;32mI (92) boot: End of partition table[0m
+[0;32mI (95) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=37af8h (228088) map[0m
+[0;32mI (181) esp_image: segment 1: paddr=00047b20 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (181) esp_image: segment 2: paddr=00047b44 vaddr=3ffbdb60 size=05cfch ( 23804) load[0m
+[0;32mI (193) esp_image: segment 3: paddr=0004d848 vaddr=40080000 size=027d0h ( 10192) load[0m
+[0;32mI (198) esp_image: segment 4: paddr=00050020 vaddr=400d0020 size=1010c0h (1052864) map[0m
+[0;32mI (560) esp_image: segment 5: paddr=001510e8 vaddr=400827d0 size=15270h ( 86640) load[0m
+[0;32mI (605) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (605) boot: Disabling RNG early entropy source...[0m
+[0;32mI (616) cpu_start: Multicore app[0m
+[0;32mI (624) cpu_start: Pro cpu start user code[0m
+[0;32mI (624) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (624) app_init: Application information:[0m
+[0;32mI (624) app_init: Project name:     cuidado_abu[0m
+[0;32mI (629) app_init: App version:      369e3c0-dirty[0m
+[0;32mI (633) app_init: Compile time:     Jun 25 2025 22:27:28[0m
+[0;32mI (638) app_init: ELF file SHA256:  8e6b45331...[0m
+[0;32mI (642) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (646) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (650) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (654) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (658) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (664) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (669) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (674) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (680) heap_init: At 3FFCC100 len 00013F00 (79 KiB): DRAM[0m
+[0;32mI (685) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (690) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (696) heap_init: At 40097A40 len 000085C0 (33 KiB): IRAM[0m
+[0;32mI (703) spi_flash: detected chip: generic[0m
+[0;32mI (705) spi_flash: flash io: dio[0m
+[0;33mW (708) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (718) coexist: coex firmware version: e727207[0m
+[0;32mI (723) main_task: Started on CPU0[0m
+[0;32mI (733) main_task: Calling app_main()[0m
+[0;32mI (763) WIFI_MGR: UUID cargado desde NVS: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (773) wifi:wifi driver task: 3ffd0584, prio:23, stack:6656, core=0[0m
+[0;32mI (783) wifi:wifi firmware version: 79fa3f41ba[0m
+[0;32mI (783) wifi:wifi certification version: v7.0[0m
+[0;32mI (783) wifi:config NVS flash: enabled[0m
+[0;32mI (783) wifi:config nano formatting: disabled[0m
+[0;32mI (793) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (793) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (793) wifi:Init management short buffer num: 32[0m
+[0;32mI (803) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (803) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (813) wifi:Init static rx buffer num: 10[0m
+[0;32mI (813) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (823) wifi_init: rx ba win: 6[0m
+[0;32mI (823) wifi_init: accept mbox: 6[0m
+[0;32mI (823) wifi_init: tcpip mbox: 32[0m
+[0;32mI (823) wifi_init: udp mbox: 6[0m
+[0;32mI (833) wifi_init: tcp mbox: 6[0m
+[0;32mI (833) wifi_init: tcp tx win: 5760[0m
+[0;32mI (833) wifi_init: tcp rx win: 5760[0m
+[0;32mI (843) wifi_init: tcp mss: 1440[0m
+[0;32mI (843) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (933) wifi:mode : sta (ec:64:c9:5d:de:a8)[0m
+[0;32mI (933) wifi:enable tsf[0m
+[0;32mI (933) WIFI_MGR: WiFi Manager inicializado con device_id: 30bbf3bc-07ee-46ca-a7a4-84725ac338c9[0m
+[0;32mI (933) BLE_ADV: Inicializando BLE con nombre: CUIDADO ABUELITO[0m
+[0;32mI (943) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (943) BTDM_INIT: Bluetooth MAC: ec:64:c9:5d:de:aa[0m
+[0;32mI (1273) BLE_ADV: GATT Server registrado[0m
+[0;32mI (1273) BLE_ADV: Servicio creado, handle: 40[0m
+[0;32mI (1273) BLE_ADV: Servicio iniciado[0m
+[0;32mI (1273) BLE_ADV: Característica añadida, handle: 42, step: 1[0m
+[0;32mI (1273) BLE_ADV: Característica RX añadida, handle: 42[0m
+[0;32mI (1283) BLE_ADV: Característica añadida, handle: 44, step: 2[0m
+[0;32mI (1293) BLE_ADV: Característica TX añadida, handle: 44[0m
+[0;32mI (1293) FALL_DETECT: Starting fall detection system...[0m
+[0;32mI (1303) BLE_ADV: Datos de advertising configurados[0m
+[0;32mI (1303) BLE_ADV: Scan response configurado[0m
+[0;32mI (1323) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (1413) FALL_DETECT: MPU6050 initialized[0m
+[0;32mI (1413) FALL_DETECT: Keep arm relaxed for calibration...[0m
+[0;32mI (2423) FALL_DETECT: Calibrating... 25%[0m
+[0;32mI (2623) FALL_DETECT: Calibrating... 50%[0m
+[0;32mI (2823) FALL_DETECT: Calibrating... 75%[0m
+[0;32mI (3023) FALL_DETECT: Calibrating... 100%[0m
+[0;32mI (3213) FALL_DETECT: Calibration complete: 1.04g[0m
+[0;32mI (3813) FALL_DETECT: Initial orientation: roll=-166.1°, pitch=34.9°[0m
+[0;32mI (3813) FALL_DETECT: Starting fall detection task...[0m
+[0;32mI (3813) main_task: Returned from app_main()[0m
+[0;32mI (38763) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (38773) BLE_ADV: Advertising detenido[0m
+[0;32mI (43173) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (43173) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (43173) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (43173) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (48083) WIFI_MGR: Escaneo WiFi completado, 9 redes encontradas[0m
+[0;32mI (53653) BLE_ADV: Comando recibido: <<START>>{"service":[0m
+[0;32mI (53793) BLE_ADV: Comando recibido: "gw","action":"conne[0m
+[0;32mI (53923) BLE_ADV: Comando recibido: ct","ssid":"FAM BARR[0m
+[0;32mI (54063) BLE_ADV: Comando recibido: ERA","password":"123[0m
+[0;32mI (54193) BLE_ADV: Comando recibido: 45"}<<END>>[0m
+[0;33mW (231763) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (231763) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (231783) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (242753) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (242763) BLE_ADV: Advertising detenido[0m
+[0;32mI (248823) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (248833) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (248833) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (248833) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (253733) WIFI_MGR: Escaneo WiFi completado, 8 redes encontradas[0m
+[0;32mI (260573) BLE_ADV: Comando recibido: <<START>>{"a":"c","s[0m
+[0;32mI (260703) BLE_ADV: Comando recibido: sid":"FAM BARRERA","[0m
+[0;32mI (260793) BLE_ADV: Comando recibido: password":"12345"}<<[0m
+[0;32mI (260933) BLE_ADV: Comando recibido: END>>[0m
+[0;33mW (359883) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (359883) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (359903) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (375593) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (375603) BLE_ADV: Advertising detenido[0m
+[0;32mI (378203) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (378203) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (378203) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (378203) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (383113) WIFI_MGR: Escaneo WiFi completado, 8 redes encontradas[0m
+[0;32mI (391113) BLE_ADV: Comando recibido: {"a":"c","ssid":"F[0m
+[0;32mI (391213) BLE_ADV: Comando recibido: AM BARRERA","passw[0m
+[0;32mI (391293) BLE_ADV: Comando recibido: ord":"12345"}[0m
+[0;33mW (454653) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (454653) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (454673) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (504843) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (504843) BLE_ADV: Advertising detenido[0m
+[0;32mI (506773) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (506773) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (506773) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (506773) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (511683) WIFI_MGR: Escaneo WiFi completado, 9 redes encontradas[0m
+[0;32mI (515633) BLE_ADV: Comando recibido: {"a":"c","ssid":"F[0m
+[0;32mI (515773) BLE_ADV: Comando recibido: AM BARRERA","passw[0m
+[0;32mI (515863) BLE_ADV: Comando recibido: ord":"1234"}[0m
+[0;33mW (545013) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (545023) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (545033) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (1048343) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (1048343) BLE_ADV: Advertising detenido[0m
+[0;32mI (1127843) BLE_ADV: Comando recibido: {"a":"c","ssid":"FAM BARRERA","password":"1234"}[0m
+[0;32mI (1127843) WIFI_MGR: Procesando comando WiFi: 1[0m
+[0;32mI (1127843) WIFI_MGR: Conectando a: FAM BARRERA[0m
+[0;32mI (1127843) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;33mW (1127853) wifi:Haven't to connect to a suitable AP now![0m
+[0;32mI (1127853) WIFI_MGR: No hay conexión activa, procediendo directamente...[0m
+[0;32mI (1127863) WIFI_MGR: Configurando nueva red: 'FAM BARRERA'[0m
+[0;32mI (1127933) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;32mI (1127933) WIFI_MGR: Comando de conexión enviado, esperando eventos...[0m
+[0;32mI (1129443) wifi:new:<6,0>, old:<1,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1129443) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1129463) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1129503) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1132663) wifi:state: run -> init (0xf00)[0m
+[0;32mI (1132673) wifi:Coexist: Wi-Fi connect fail, apply reconnect coex policy[0m
+
+[0;32mI (1132673) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;33mW (1132673) WIFI_MGR: STA desconectado, reason: 15[0m
+[0;32mI (1144313) BLE_ADV: Comando recibido: {"a":"c","ssid":"FAM BARRERA","password":"1234"}[0m
+[0;32mI (1144313) WIFI_MGR: Procesando comando WiFi: 1[0m
+[0;32mI (1144313) WIFI_MGR: Conectando a: FAM BARRERA[0m
+[0;32mI (1144313) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;33mW (1144323) wifi:Haven't to connect to a suitable AP now![0m
+[0;32mI (1144333) WIFI_MGR: No hay conexión activa, procediendo directamente...[0m
+[0;32mI (1144333) WIFI_MGR: Configurando nueva red: 'FAM BARRERA'[0m
+[0;32mI (1144343) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;32mI (1144353) WIFI_MGR: Comando de conexión enviado, esperando eventos...[0m
+[0;32mI (1144363) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1144363) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1144393) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1144403) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1147503) wifi:state: run -> init (0xf00)[0m
+[0;32mI (1147513) wifi:Coexist: Wi-Fi connect fail, apply reconnect coex policy[0m
+
+[0;32mI (1147513) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;33mW (1147513) WIFI_MGR: STA desconectado, reason: 15[0m
+[0;33mW (1243553) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (1243553) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (1243573) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (1243663) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (1243673) BLE_ADV: Advertising detenido[0m
+[0;32mI (1245953) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (1245963) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (1245963) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (1245963) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (1250863) WIFI_MGR: Escaneo WiFi completado, 9 redes encontradas[0m
+[0;32mI (1255313) BLE_ADV: Comando recibido: {"a":"c","ssid":"F[0m
+[0;32mI (1255403) BLE_ADV: Comando recibido: AM BARRERA","passw[0m
+[0;32mI (1255493) BLE_ADV: Comando recibido: ord":"1234"}[0m
+[0;33mW (1464293) BT_HCI: hcif disc complete: hdl 0x0, rsn 0x13[0m
+[0;32mI (1464293) BLE_ADV: Cliente desconectado, conn_id: 0[0m
+[0;32mI (1464313) BLE_ADV: Advertising iniciado correctamente[0m
+[0;32mI (2001793) BLE_ADV: Cliente conectado, conn_id: 0[0m
+[0;32mI (2001803) BLE_ADV: Advertising detenido[0m
+[0;32mI (2004583) BLE_ADV: Comando recibido: {"a":"s"}[0m
+[0;32mI (2004583) WIFI_MGR: Procesando comando WiFi: 0[0m
+[0;32mI (2004583) WIFI_MGR: Escaneando redes WiFi...[0m
+[0;32mI (2004583) WIFI_MGR: Iniciando escaneo WiFi...[0m
+[0;32mI (2009493) WIFI_MGR: Escaneo WiFi completado, 7 redes encontradas[0m
+[0;32mI (2016283) BLE_ADV: Comando recibido: {"a":"c","ssid":"FAM BARRERA","password":"1234"}[0m
+[0;32mI (2016283) WIFI_MGR: Procesando comando WiFi: 1[0m
+[0;32mI (2016293) WIFI_MGR: Conectando a: FAM BARRERA[0m
+[0;32mI (2016293) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;33mW (2016293) wifi:Haven't to connect to a suitable AP now![0m
+[0;32mI (2016303) WIFI_MGR: No hay conexión activa, procediendo directamente...[0m
+[0;32mI (2016303) WIFI_MGR: Configurando nueva red: 'FAM BARRERA'[0m
+[0;32mI (2016313) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;32mI (2016323) WIFI_MGR: Comando de conexión enviado, esperando eventos...[0m
+[0;32mI (2016333) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (2016333) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (2016373) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2016383) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2019483) wifi:state: run -> init (0xf00)[0m
+[0;32mI (2019493) wifi:Coexist: Wi-Fi connect fail, apply reconnect coex policy[0m
+
+[0;32mI (2019493) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;33mW (2019493) WIFI_MGR: STA desconectado, reason: 15[0m
+[0;32mI (2050843) BLE_ADV: Comando recibido: {"a":"c","ssid":"FAM BARRERA","password":"1234"}[0m
+[0;32mI (2050843) WIFI_MGR: Procesando comando WiFi: 1[0m
+[0;32mI (2050843) WIFI_MGR: Conectando a: FAM BARRERA[0m
+[0;32mI (2050843) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;33mW (2050853) wifi:Haven't to connect to a suitable AP now![0m
+[0;32mI (2050853) WIFI_MGR: No hay conexión activa, procediendo directamente...[0m
+[0;32mI (2050863) WIFI_MGR: Configurando nueva red: 'FAM BARRERA'[0m
+[0;32mI (2050873) WIFI_MGR: Iniciando conexión a 'FAM BARRERA'...[0m
+[0;32mI (2050873) WIFI_MGR: Comando de conexión enviado, esperando eventos...[0m
+[0;32mI (2050893) wifi:new:<6,0>, old:<6,0>, ap:<255,255>, sta:<6,0>, prof:1, snd_ch_cfg:
